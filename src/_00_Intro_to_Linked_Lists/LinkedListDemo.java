@@ -31,16 +31,19 @@ public class LinkedListDemo {
 		LinkedList<Integer> stars = new LinkedList<Integer>();
 		stars.add(21);
 		for (int i = 0; i < 5; i++) {
-			stars.add(i*55);
-		}
-		Node<Integer> node = stars.getTail();
-		for (int i = 0; i < stars.size(); i++) {
-			node = stars.getTail().getNext();
-			node.setValue(node.getValue()*i);
-			stars.getTail().setNext(node);
+			stars.add(i);
 		}
 		stars.print();
-
+		System.out.println(stars.getHead().getValue());
+		System.out.println(stars.getHead().getNext().getValue());
+		Node<Integer> node = stars.getHead();
+		for (int i = 0; i < stars.size(); i++) {
+			node = node.getNext();
+			stars.getHead().setNext(node);
+			System.out.println(node.getValue());
+		}
+		stars.print();
+		
 	}
 
 }
