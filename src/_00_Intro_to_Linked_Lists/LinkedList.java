@@ -97,7 +97,7 @@ public class LinkedList<T> {
     public int size() {
         int size = 0;
         if (head != null) {
-
+        	
             Node<T> next = head;
 
             while (next != null) {
