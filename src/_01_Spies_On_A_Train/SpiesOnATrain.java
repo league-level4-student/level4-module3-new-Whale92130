@@ -31,6 +31,7 @@ public class SpiesOnATrain {
 		print(" ");
 
 		String[] allResponses = new String[train.size()];
+		HashMap<String, Integer> susNess = new HashMap<String, Integer>();
 		Node<TrainCar> car = train.getHead();
 		for (int i = 0; i < train.size(); i++) {
 			allResponses[i] = car.getValue().questionPassenger();
@@ -44,26 +45,58 @@ public class SpiesOnATrain {
 			allResponses[i] = build.toString();
 
 		}
-
+		ArrayList<String> suspects = new ArrayList<String>();
 		for (int i = 0; i < allResponses.length; i++) {
 			String[] words = allResponses[i].split(" ");
 			String suspect = "joe";
 			suspect = words[0];
+			boolean canAdd = true;
+			for (int l = 0; l <suspects.size(); l++) {
+				if (suspect.trim().equals(suspects.get(l).trim())) {
+					canAdd = false;
+				}
+				
+			}
+			if (canAdd == true) {
+				suspects.add(suspect);
+			}
+			susNess.put(suspect, 0);
 			StringBuilder build = new StringBuilder();
-			build.append(allResponses[i]);
+			for (int p = 1; p < words.length; p++) {
+				build.append(words[p]);
+				build.append(" ");
+			}
 			int susIndex = allResponses[i].indexOf(suspect);
 			build.delete(0, susIndex);
-			allResponses[i] = build.toString();
+			build.delete(build.toString().length() - 2, build.toString().length() - 1);
+			allResponses[i] = build.toString().trim();
 			for (int o = 0; o < clues.length; o++) {
+				print("clues: " + clues[o]);
+				print("allRe: " + allResponses[i] + " ||| " + suspect);
 				if (allResponses[i].equals(clues[o])) {
 					print(suspect);
-					return suspect;
-					//I think clue string and allResponse string do not match
+					int timesSus = susNess.get(suspect);
+					susNess.remove(suspect);
+					susNess.put(suspect, timesSus+1);
+					// I think clue string and allResponse string do not match
 				}
 			}
 			// weturnALI
 		}
-		return "Ali";
+		System.out.println(susNess);
+		int maxSus = 0;
+		String maxSusPerson = "";
+		print(suspects.size());
+		print(susNess.size());
+		
+		for (int i = 0; i<suspects.size(); i++) {
+			if (susNess.get(suspects.get(i))>maxSus) {
+				maxSus = susNess.get(suspects.get(i));
+				maxSusPerson = suspects.get(i);
+			}
+		}
+		print("Max sus= " + maxSusPerson);
+		return maxSusPerson;
 	}
 
 	<T> void print(T i) {
