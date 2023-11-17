@@ -27,7 +27,7 @@ public class RainbowZombieDanceParty {
         try {
             rounds = Integer.parseInt(sc.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("ERROR - Please enter a whole number.");
+            System.out.println("ERROR - Please enter a valid number.");
         } catch (Exception e) {
             System.out.println("ERROR - Illegal input.");
         } finally {
