@@ -34,18 +34,15 @@ public class RainbowZombieCongaLine {
 	}
 
 	// Make the passed in zombie the first Zombie in the conga line!
+	//not working
 	public void engine(Zombie dancer) {
-		LinkedList<Zombie> tempLine = new LinkedList<Zombie>();
-		tempLine.add(dancer);
-		for (int i = 0; i < congaLine.size(); i++) {
-			tempLine.add(congaLine.getHead().getValue());
-			congaLine.remove(0);
-		}
-		congaLine = tempLine;
+		Node<Zombie> node = new Node<Zombie>(dancer);
+		congaLine.setHead(node);
+		congaLine.print();
 	}
 
 	// Make the passed in zombie the last Zombie in the conga line!
-	//not working
+	//working
 	public void caboose(Zombie dancer) {
 		congaLine.add(dancer);
 	}

@@ -51,6 +51,7 @@ public class RainbowZombieDanceParty {
                     || (randomAction < 2 && randomAction > 4)) {
 
                 randomAction = rand.nextInt(zombieActions.length);
+                randomAction = 0;
 
             } else {
                 continue;
