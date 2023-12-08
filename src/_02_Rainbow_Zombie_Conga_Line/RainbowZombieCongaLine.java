@@ -36,9 +36,13 @@ public class RainbowZombieCongaLine {
 	// Make the passed in zombie the first Zombie in the conga line!
 	//not working
 	public void engine(Zombie dancer) {
-		Node<Zombie> node = new Node<Zombie>(dancer);
-		congaLine.setHead(node);
-		congaLine.print();
+		congaLine.add(dancer);
+		print("");
+		Node<Zombie> node = congaLine.getTail();
+		for (int i = congaLine.size(); i>1; i--) {
+			node = node.getPrev();
+			node.setNext(node);
+		}
 	}
 
 	// Make the passed in zombie the last Zombie in the conga line!
@@ -90,27 +94,19 @@ public class RainbowZombieCongaLine {
 	 * Remove the first zombie with the same hat color as the passed in zombie from
 	 * the conga line!
 	 */
-	// not working
+	// working WWWWWWW :)
 	public void youAreDone(Zombie dancer) {
 		ZombieHatColor color = dancer.getZombieHatColor();
-		LinkedList<Zombie> tempLine = new LinkedList<Zombie>();
-		boolean zombieFound = false;
-		while (congaLine.getHead() != null) {
-			print("run");
-			if (color.compareTo(congaLine.getHead().getValue().getZombieHatColor()) == 0 && zombieFound == false) {
-				congaLine.remove(0);
-				zombieFound = true;
-				print("found");
-			} else {
-				tempLine.add(congaLine.getHead().getValue());
-				congaLine.remove(0);
-				print("added");
+		Node<Zombie> node = congaLine.getHead();
+		for (int i = 0; i<congaLine.size(); i++) {
+			if (node.getValue().getZombieHatColor().equals(color)) {
+				congaLine.remove(i);
+				break;
 			}
-			tempLine.print();
+			else {
+				node = node.getNext();
+			}
 		}
-		congaLine = tempLine;
-		print("current conga line: ");
-		congaLine.print();
 	}
 
 	/*
