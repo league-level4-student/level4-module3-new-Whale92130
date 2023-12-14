@@ -34,60 +34,95 @@ public class RainbowZombieCongaLine {
 	}
 
 	// Make the passed in zombie the first Zombie in the conga line!
-	//not working
+	// not working
 	public void engine(Zombie dancer) {
-		congaLine.add(dancer);
-		print("");
-		Node<Zombie> node = congaLine.getTail();
-		for (int i = congaLine.size(); i>1; i--) {
-			node = node.getPrev();
-			node.setNext(node);
+		Node<Zombie> newNode = new Node<>(dancer);
+
+		// Add the dancer to the front of the conga line
+		if (congaLine.getHead() == null) {
+			congaLine.setHead(newNode);
+			congaLine.setTail(newNode);
+		} else {
+			newNode.setNext(congaLine.getHead());
+			congaLine.getHead().setPrev(newNode);
+			congaLine.setHead(newNode);
 		}
 	}
 
 	// Make the passed in zombie the last Zombie in the conga line!
-	//working
+	// working
 	public void caboose(Zombie dancer) {
 		congaLine.add(dancer);
 	}
 
 	// Place the zombie at the designated position in the conga line!
+	// working
 	public void jumpInTheLine(Zombie dancer, int position) {
-		int posCount = 0;
-		LinkedList<Zombie> tempLine = congaLine;
-		for (int i = 0; i < congaLine.size(); i++) {
-			congaLine.remove(i);
-		}
-		for (int i = 0; i < tempLine.size(); i++) {
-			congaLine.add(tempLine.getHead().getValue());
-			tempLine.remove(0);
-			if (posCount == position) {
-				congaLine.add(dancer);
-			}
-			posCount++;
-		}
+		Node<Zombie> newNode = new Node<>(dancer);
 
+		// If the conga line is empty or the position is 0, add to the front
+		if (congaLine.getHead() == null || position == 0) {
+			newNode.setNext(congaLine.getHead());
+			if (congaLine.getHead() != null) {
+				congaLine.getHead().setPrev(newNode);
+			}
+			congaLine.setHead(newNode);
+		} else {
+			int currentPosition = 0;
+			Node<Zombie> current = congaLine.getHead();
+
+			// Traverse to the specified position
+			while (currentPosition < position - 1 && current.getNext() != null) {
+				current = current.getNext();
+				currentPosition++;
+			}
+
+			// Insert the new node at the specified position
+			newNode.setNext(current.getNext());
+			if (current.getNext() != null) {
+				current.getNext().setPrev(newNode);
+			}
+			current.setNext(newNode);
+			newNode.setPrev(current);
+		}
 	}
 
 	/*
 	 * Remove all zombies with the same hat color as the passed in zombie from the
 	 * conga line!
 	 */
+	// not sure
 	public void everyoneOut(Zombie dancer) {
 		ZombieHatColor color = dancer.getZombieHatColor();
-		LinkedList<Zombie> tempLine = congaLine;
-		for (int i = 0; i < congaLine.size(); i++) {
-			congaLine.remove(i);
-		}
-		for (int i = 0; i < tempLine.size(); i++) {
-			if (color == tempLine.getHead().getValue().getZombieHatColor()) {
-				tempLine.remove(0);
+		Node<Zombie> current = congaLine.getHead();
+		Node<Zombie> prev = null;
+
+		// Iterate through the conga line
+		while (current != null) {
+			if (current.getValue().getZombieHatColor() == color) {
+				// Remove the current node
+				if (prev == null) {
+					// If the matched node is the head, update the head
+					congaLine.setHead(current.getNext());
+					if (current.getNext() != null) {
+						current.getNext().setPrev(null);
+					}
+				} else {
+					// If the matched node is not the head, update the links
+					prev.setNext(current.getNext());
+					if (current.getNext() != null) {
+						current.getNext().setPrev(prev);
+					}
+				}
+
+				// Move to the next node
+				current = current.getNext();
 			} else {
-				congaLine.add(tempLine.getHead().getValue());
-				tempLine.remove(0);
+				// Move to the next node
+				prev = current;
+				current = current.getNext();
 			}
 		}
-
 	}
 
 	/*
@@ -98,12 +133,11 @@ public class RainbowZombieCongaLine {
 	public void youAreDone(Zombie dancer) {
 		ZombieHatColor color = dancer.getZombieHatColor();
 		Node<Zombie> node = congaLine.getHead();
-		for (int i = 0; i<congaLine.size(); i++) {
+		for (int i = 0; i < congaLine.size(); i++) {
 			if (node.getValue().getZombieHatColor().equals(color)) {
 				congaLine.remove(i);
 				break;
-			}
-			else {
+			} else {
 				node = node.getNext();
 			}
 		}
@@ -114,46 +148,78 @@ public class RainbowZombieCongaLine {
 	 * one to the front, one to the end and one in the middle.
 	 */
 	public void brains(Zombie dancer) {
-		LinkedList<Zombie> tempLine = congaLine;
-		ZombieHatColor color = dancer.getZombieHatColor();
-		Node<Zombie> zoomby = congaLine.getHead();
-		int howManyZombies = 0;
-		ArrayList<Zombie> chosenZombies = new ArrayList<Zombie>();
-		for (int i = 0; i < congaLine.size(); i++) {
-			if (zoomby.getValue().getZombieHatColor().equals(color)) {
-				howManyZombies++;
-				chosenZombies.add(zoomby.getValue());
-			}
-			zoomby = zoomby.getNext();
-		}
-		zoomby = congaLine.getHead();
-		for (int i = 0; i < congaLine.size(); i++) {
-			congaLine.remove(i);
-		}
-		for (int i = 0; i < tempLine.size(); i++) {
-			if (howManyZombies == 2) {
-				if (i == 0) {
-					congaLine.add(chosenZombies.get(0));
-				}
-				if (i == tempLine.size() - 1) {
-					congaLine.add(chosenZombies.get(1));
-				}
-			}
-			if (howManyZombies == 3) {
-				if (i == 0) {
-					congaLine.add(chosenZombies.get(0));
-				}
-				if (i == tempLine.size() - 1) {
-					congaLine.add(chosenZombies.get(1));
-				}
-				if (i == (tempLine.size() - 1) / 2) {
-					congaLine.add(chosenZombies.get(2));
-				}
-			}
-			congaLine.add(tempLine.getHead().getValue());
-			tempLine.remove(0);
-		}
+	    ZombieHatColor color = dancer.getZombieHatColor();
+	    Node<Zombie> current = congaLine.getHead();
+	    Node<Zombie> prev = null;
 
+	    // Count the number of zombies with the same hat color
+	    int count = 0;
+	    while (current != null) {
+	        if (current.getValue().getZombieHatColor() == color) {
+	            count++;
+	        }
+	        current = current.getNext();
+	    }
+
+	    // Reset current to the head for traversal
+	    current = congaLine.getHead();
+
+	    // Create a list of chosen zombies with the same hat color
+	    ArrayList<Zombie> chosenZombies = new ArrayList<>();
+	    while (current != null) {
+	        if (current.getValue().getZombieHatColor() == color) {
+	            chosenZombies.add(current.getValue());
+	        }
+	        current = current.getNext();
+	    }
+
+	    // Remove all zombies with the same hat color from the conga line
+	    everyoneOut(dancer);
+
+	    // Add chosen zombies back to the conga line
+	    current = congaLine.getHead();
+	    prev = null;
+	    int index = 0;
+	    while (current != null && index < chosenZombies.size()) {
+	        if (current.getValue().getZombieHatColor() != color) {
+	            // Add a chosen zombie in the middle
+	            Zombie chosenZombie = chosenZombies.get(index);
+	            Node<Zombie> newNode = new Node<>(chosenZombie);
+	            if (prev == null) {
+	                // Add to the front
+	                newNode.setNext(current);
+	                current.setPrev(newNode);
+	                congaLine.setHead(newNode);
+	            } else {
+	                // Add to the middle
+	                newNode.setPrev(prev);
+	                newNode.setNext(current);
+	                current.setPrev(newNode);
+	                prev.setNext(newNode);
+	            }
+	            index++;
+	        }
+
+	        prev = current;
+	        current = current.getNext();
+	    }
+
+	    // Add one to the end
+	    while (current != null && current.getNext() != null) {
+	        current = current.getNext();
+	    }
+
+	    if (current == null) {
+	        // If the conga line is empty, set the head and tail to the new zombie
+	        congaLine.setHead(new Node<>(new Zombie(color)));
+	        congaLine.setTail(congaLine.getHead());
+	    } else {
+	        // Add to the end
+	        Node<Zombie> newNode = new Node<>(new Zombie(color));
+	        current.setNext(newNode);
+	        newNode.setPrev(current);
+	        congaLine.setTail(newNode);
+	    }
 	}
 
 	/*
