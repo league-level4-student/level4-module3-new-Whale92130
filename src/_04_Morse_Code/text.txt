@@ -1,0 +1,15 @@
+void decode() {
+    	Scanner scan = new Scanner(System.in);
+        System.out.println("Type a word to be converted to morse code.");
+        ///System.out.println(getOutput(scan.next().trim()));
+        System.out.println(getOutput("hi"));
+    }
+    String getOutput(String morseCode) {
+        String output = "";
+        String[] message = morseCode.split("");
+        for (int i = 0;i<message.length; i++) {
+        	MorseCode code = new MorseCode(message[i]);
+        	output = output + mcTree.search(code).getValue();
+        }
+		return output;
+    }

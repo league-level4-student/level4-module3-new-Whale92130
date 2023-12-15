@@ -67,8 +67,9 @@ public class MorseDecoder {
      */
     void decode() {
     	Scanner scan = new Scanner(System.in);
-        
-        System.out.println(getOutput());
+        System.out.println("Type morse code to be converted to words.");
+        ///System.out.println(getOutput(scan.next().trim()));
+        System.out.println(getOutput(scan.nextLine()));
     }
     String getOutput(String morseCode) {
         String output = "";
